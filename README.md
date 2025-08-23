@@ -38,8 +38,7 @@ pm2 start ecosystem.config.js
 
 ### Environment Variables
 - **NOUS_API_KEY**: Your Nous Research API key
-- **HF_API_KEY**: Your Hugging Face API token (get free at huggingface.co)
-- **HF_MODEL**: Model for prompt generation (default: microsoft/DialoGPT-medium)
+- **GEMINI_API_KEY**: Your Gemini API key
 - **REQUEST_INTERVAL_MIN/MAX**: Timing intervals for requests
 - **LOG_LEVEL**: Logging verbosity (info, debug, error)
 
