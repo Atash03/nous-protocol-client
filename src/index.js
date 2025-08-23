@@ -3,8 +3,6 @@ const logger = require('./utils/logger');
 const RandomTimer = require('./utils/randomTimer');
 const NousAPIClient = require('./services/apiClient');
 
-const gemini_prompt = "Generate a random interesting prompt to give to the human-centric language models and simulators. Just give the prompt itself, don't give additional instructions, and don't give the previous prompt."
-
 class NousAPIScheduler {
   constructor() {
     this.apiClient = new NousAPIClient();
@@ -34,7 +32,7 @@ class NousAPIScheduler {
 
       async function getRandomPrompt() {
         const response = await axios.post('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent', {
-          contents: [{ parts: [{ text: gemini_prompt }] }],
+          contents: [{ parts: [{ text: "Generate a random interesting prompt to give to the human-centric language models and simulators. Just give the prompt itself, don't give additional instructions, and don't give the previous prompt." }] }],
           generationConfig: {
             maxOutputTokens: 50,
             temperature: 0.7
