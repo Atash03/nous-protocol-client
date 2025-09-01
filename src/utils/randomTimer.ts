@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import logger from "./logger.js";
 
 export interface RandomTimerOptions {
   minMinutes: number;
@@ -25,7 +24,7 @@ export class RandomTimer {
 
     const intervalMs = Math.floor(intervalMinutes * 60 * 1000);
 
-    logger.info(
+    console.info(
       `Next request scheduled in ${intervalMinutes.toFixed(2)} minutes`,
     );
     return intervalMs;

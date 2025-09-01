@@ -2,7 +2,6 @@ import config from "@/config";
 import NousAPIClient from "@/services/apiClient";
 import { getRandomPrompt } from "@/utils/getRandomPrompt";
 import { getDelayUntilNextStartTime } from "@/utils/getRandomStartTime";
-import logger from "@/utils/logger";
 import { RandomTimer } from "@/utils/randomTimer";
 
 export class NousAPIScheduler {
@@ -29,7 +28,7 @@ export class NousAPIScheduler {
 
     private async makeScheduledRequest(): Promise<void> {
         if (this.requestCount >= this.requestLimit) {
-            logger.info("Request limit reached. Stopping scheduler.");
+            console.info("Request limit reached. Stopping scheduler.");
             this.stop();
             return;
         }
@@ -37,14 +36,14 @@ export class NousAPIScheduler {
         try {
             this.requestCount++;
 
-            logger.info(`Making scheduled request #${this.requestCount}`);
+            console.info(`Making scheduled request #${this.requestCount}`);
 
             let randomPrompt = "";
             
             try {
                 randomPrompt = await getRandomPrompt();
             } catch (err) {
-                logger.info(`Request #${this.requestCount} to GEMINI has failed`, {
+                console.info(`Request #${this.requestCount} to GEMINI has failed`, {
                     error: err,
                 });
                 process.exit(0);
@@ -52,18 +51,18 @@ export class NousAPIScheduler {
 
             const response = await this.apiClient.makeCustomRequest(randomPrompt);
 
-            logger.info(`Request #${this.requestCount} completed successfully`, {
+            console.info(`Request #${this.requestCount} completed successfully`, {
                 responsePreview: response.choices?.[0]?.message?.content,
             });
         } catch (error: any) {
-            logger.error(`Request #${this.requestCount} failed`, {
+            console.error(`Request #${this.requestCount} failed`, {
                 error: error.message,
             });
         }
     }
 
     public start(): void {
-        logger.info("Starting Nous API Scheduler", {
+        console.info("Starting Nous API Scheduler", {
             minInterval: config.timing.minInterval,
             maxInterval: config.timing.maxInterval,
             model: config.api.model,
@@ -81,7 +80,7 @@ export class NousAPIScheduler {
         setInterval(
             () => {
                 const runtime = (new Date().getTime() - this.startTime.getTime()) / 1000 / 60; // minutes
-                logger.info("Runtime statistics", {
+                console.info("Runtime statistics", {
                     totalRequests: this.requestCount,
                     runtimeMinutes: runtime.toFixed(2),
                     avgRequestsPerHour: ((this.requestCount / runtime) * 60).toFixed(2),
@@ -94,7 +93,7 @@ export class NousAPIScheduler {
     }
 
     public stop(): void {
-        logger.info("Request limit reached. Resetting scheduler for the next day.");
+        console.info("Request limit reached. Resetting scheduler for the next day.");
         this.resetScheduler();
     }
 
@@ -115,12 +114,12 @@ export class NousAPIScheduler {
 
         // Schedule the next run for a random time tomorrow
         const delay = getDelayUntilNextStartTime();
-        logger.info(
+        console.info(
             `Next run scheduled in ${Math.floor(delay / 1000 / 60)} minutes`,
         );
 
         setTimeout(() => {
-            logger.info("Starting new scheduler for the day");
+            console.info("Starting new scheduler for the day");
             this.start();
         }, delay);
     }

@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from "axios";
 import config from "../config/index.js";
-import logger from "../utils/logger.js";
 
 export interface APIRequestOptions {
   maxTokens?: number;
@@ -48,7 +47,7 @@ export class NousAPIClient {
     // Request interceptor for logging
     this.client.interceptors.request.use(
       (request: InternalAxiosRequestConfig) => {
-        logger.info("Making API request", {
+        console.info("Making API request", {
           url: request.url,
           method: request.method,
           timestamp: new Date().toISOString(),
@@ -56,7 +55,7 @@ export class NousAPIClient {
         return request;
       },
       (error) => {
-        logger.error("Request interceptor error", { error: error.message });
+        console.error("Request interceptor error", { error: error.message });
         return Promise.reject(error);
       },
     );
@@ -64,7 +63,7 @@ export class NousAPIClient {
     // Response interceptor for logging
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
-        logger.info("API response received", {
+        console.info("API response received", {
           status: response.status,
           statusText: response.statusText,
           responseTime: response.headers["x-response-time"] || "unknown",
@@ -72,7 +71,7 @@ export class NousAPIClient {
         return response;
       },
       (error) => {
-        logger.error("API response error", {
+        console.error("API response error", {
           status: error.response?.status,
           statusText: error.response?.statusText,
           message: error.message,
@@ -96,7 +95,7 @@ export class NousAPIClient {
         temperature: 0.7,
       });
 
-      logger.info("Successful API request", {
+      console.info("Successful API request", {
         model: config.api.model,
         tokensUsed: response.data.usage?.total_tokens || "unknown",
         responseLength:
@@ -105,7 +104,7 @@ export class NousAPIClient {
 
       return response.data;
     } catch (error: any) {
-      logger.error("API request failed", {
+      console.error("API request failed", {
         error: error.message,
         status: error.response?.status,
         statusText: error.response?.statusText,
@@ -134,14 +133,14 @@ export class NousAPIClient {
         requestBody,
       );
 
-      logger.info("PROMPT & Custom API request completed", {
+      console.info("PROMPT & Custom API request completed", {
         prompt: prompt,
         tokensUsed: response.data.usage?.total_tokens || "unknown",
       });
 
       return response.data;
     } catch (error: any) {
-      logger.error("Custom API request failed", {
+      console.error("Custom API request failed", {
         error: error.message,
         prompt: prompt.substring(0, 50) + "...",
       });
