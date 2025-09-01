@@ -1,8 +1,8 @@
-import config from "@/config";
-import NousAPIClient from "@/services/apiClient";
-import { getRandomPrompt } from "@/utils/getRandomPrompt";
-import { getDelayUntilNextStartTime } from "@/utils/getRandomStartTime";
-import { RandomTimer } from "@/utils/randomTimer";
+import config from "../../config/index.js";
+import NousAPIClient from "../../services/apiClient.js";
+import { getRandomPrompt } from "../../utils/getRandomPrompt.js";
+import { getDelayUntilNextStartTime } from "../../utils/getRandomStartTime.js";
+import { RandomTimer } from "../../utils/randomTimer.js";
 
 export class NousAPIScheduler {
     private apiClient: NousAPIClient;
